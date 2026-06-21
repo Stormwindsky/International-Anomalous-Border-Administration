@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I.A.B.A. - Central Database</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&family=Verdana&display=swap" rel="stylesheet">
+    <style>
+        :root { --wiki-bg: #ffffff; --wiki-border: #dcdcdc; --wiki-header: #f2f2f2; --text-color: #333; --link-color: #b01; }
+        body { background-color: #f9f9f9; color: var(--text-color); font-family: 'Verdana', sans-serif; margin: 0; padding: 20px; line-height: 1.6; }
+        #container { max-width: 1000px; margin: 0 auto; border: 1px solid var(--wiki-border); background-color: var(--wiki-bg); padding: 40px; box-shadow: 2px 2px 10px rgba(0,0,0,0.05); }
+        header { border-bottom: 3px solid #b01; margin-bottom: 20px; padding-bottom: 15px; }
+        h1 { color: #000; text-transform: none; margin: 0; font-size: 2.3em; border: none; letter-spacing: 1px; }
+        .subtitle { font-style: italic; color: #666; font-size: 0.9em; margin-top: 5px; }
+        .status-bar { background: #eee; font-size: 0.85em; padding: 8px; border: 1px solid #ddd; margin: 20px 0; border-left: 5px solid #b01; }
+        nav { margin-bottom: 30px; display: flex; gap: 10px; flex-wrap: wrap; }
+        button { background: #f0f0f0; border: 1px solid #ccc; padding: 8px 14px; cursor: pointer; font-size: 0.9em; border-radius: 3px; font-weight: bold; }
+        button:hover { background: #e0e0e0; }
+        #content { min-height: 400px; }
+        .file-link { display: block; color: var(--link-color); text-decoration: none; padding: 8px 0; font-weight: bold; border-bottom: 1px solid #eee; }
+        .file-link:hover { text-decoration: underline; background: #fff5f5; }
+        footer { margin-top: 50px; font-size: 0.8em; color: #888; text-align: center; border-top: 1px solid #eee; padding-top: 20px; }
+    </style>
+</head>
+<body>
+<div id="container">
+    <header>
+        <h1>I.A.B.A. CENTRAL ARCHIVES</h1>
+        <p class="subtitle">International Anomalous Border Administration — Joint USA-URSS Classified Database</p>
+    </header>
+    <div class="status-bar">CLASSIFICATION: TOP SECRET | COLD WAR PROTOCOLS ACTIVE | DUAL LICENSE: CC-BY-4.0 & OGA-BY 4.0</div>
+    <nav>
+        <button onclick="location.reload()">[ MAIN HUB ]</button>
+        <button onclick="loadFileList('Biomes', 'Biomes.html')">[ VIEW BIOMES ]</button>
+        <button onclick="loadFileList('Subjects', 'Subject.html')">[ VIEW ENTITIES (SUBJECTS) ]</button>
+        <button onclick="loadFileList('Objects', 'Object.html')">[ VIEW RECOVERED OBJECTS ]</button>
+    </nav>
+    <div id="content">
+        <h2>WELCOME TO THE ADMINISTRATION DATABASE</h2>
+        <p>In 1954, following an unprecedented anomalous fracture in reality, the United States and the Soviet Union signed the Secret Geneva Accords. The <strong>International Anomalous Border Administration (I.A.B.A.)</strong> was established as an independent, neutral agency to contain, study, and keep these non-Euclidean spaces hidden from the public eye.</p>
+        <p>The space is not structured by traditional linear levels, but rather generated via massive global <strong>Biomes</strong>. The architecture and artifacts recovered within the anomaly are strictly bound to a temporal anchor, ranging from the years <strong>1895 to 2010</strong>. No items outside of this 115-year historical window can exist inside the structure.</p>
+        <hr>
+        <h3>Database Architecture:</h3>
+        <ul>
+            <li><strong>Biomes:</strong> Endless regions sharing regional aesthetics (Parisian apartments, Soviet bunkers, Western offices) with chaotic electrical anomalies.</li>
+            <li><strong>Subjects:</strong> Biological, physical, or psychological anomalous entities roaming the biomes.</li>
+            <li><strong>Objects:</strong> Tools, signboards, architectural elements, and rations processed or manufactured between 1895 and 2010.</li>
+        </ul>
+    </div>
+    <footer>
+        <p>
+          Dual licensed under the 
+          <a href="https://opengameart.org/content/oga-by-40-faq" style="color: #888; text-decoration: underline;">OGA-BY 4.0</a> 
+          and 
+          <a href="https://creativecommons.org/licenses/by/4.0/" style="color: #888; text-decoration: underline;">Creative Commons Attribution 4.0</a>.
+        </p>
+    </footer>
+</div>
+
+<script>
+    const GITHUB_USER = 'stormwindsky';
+    const GITHUB_REPO = 'THE-SASQUATCH-TRACKER'; // Changez ceci si vous renommez votre dépôt
+
+    async function loadFileList(folderPath, targetHtmlPage) {
+        const contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = `<p>Connecting to I.A.B.A. secure servers... Fetching ${folderPath}...</p>`;
+        try {
+            const response = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${folderPath}`);
+            const files = await response.json();
+            
+            let html = `<h2>CLASSIFIED ENTRIES: ${folderPath.toUpperCase()}</h2>`;
+            let count = 0;
+            
+            files.forEach(file => {
+                if (file.name.endsWith('.md')) {
+                    const displayName = file.name.replace('.md', '').toUpperCase();
+                    html += `<a class="file-link" href="${targetHtmlPage}?=${file.name}">• LOG_${folderPath.toUpperCase()}_${displayName}</a>`;
+                    count++;
+                }
+            });
+            
+            if(count === 0) {
+                html += `<p>No records found in the /${folderPath} folder yet. Please add Markdown files to your repository.</p>`;
+            }
+            
+            contentDiv.innerHTML = html;
+        } catch (e) {
+            contentDiv.innerHTML = "<p style='color:red'>SECURITY ERROR: DATABASE UNREACHABLE OR FOLDER MISSING.</p>";
+        }
+    }
+</script>
+</body>
+</html>
