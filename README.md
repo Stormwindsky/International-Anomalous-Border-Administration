@@ -1,2 +1,2 @@
-# International-Anomalous-Border-Administration
+# International Anomalous Border Administration
 Backrooms Reimagined by Stormwindsky
